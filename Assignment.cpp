@@ -136,7 +136,58 @@ void robotShoulderTrape() {
 	glVertex3f(2.89683, 7.52409, -1.7381);
 	glVertex3f(1.82333, 6.93069, -2.05428);
 
-	glEnd;
+	glVertex3f(1.82333, 6.93069, -2.05428);
+	glVertex3f(1.72206, 13.4897, -2.05396);
+	glVertex3f(1.77636, 13.4897, 1.26853);
+	glVertex3f(1.87763, 6.93069, -1.2682);
+
+	glEnd();
+}
+
+void robotShoulderTop() {
+
+	//Top of the shoulder
+	glBegin(GL_QUADS);
+
+	glVertex3f(1.78392, 13.3975, 1.23897);
+	glVertex3f(1.78392, 12.4975, 1.23897);
+	glVertex3f(-1.84343, 12.4975, 1.25047);
+	glVertex3f(-1.84343, 13.3975, 1.25047);
+
+	glVertex3f(-1.84343, 12.4975, 1.25047);
+	glVertex3f(-1.84343, 13.3975, 1.25047);
+	glVertex3f(-1.89677, 13.3975, -2.01295);
+	glVertex3f(1.73058, 13.3975, -2.02446);
+
+	glVertex3f(-1.89677, 13.3975, -2.01295);
+	glVertex3f(1.73058, 13.3975, -2.02446);
+	glVertex3f(1.73058, 12.4975, -2.02446);
+	glVertex3f(-1.89677, 12.4975, -2.01295);
+
+	glVertex3f(1.73058, 12.4975, -2.02446);
+	glVertex3f(-1.89677, 12.4975, -2.01295);
+	glVertex3f(1.78392, 12.4975, 1.23897);
+	glVertex3f(-1.84343, 12.4975, 1.25047);
+
+	glEnd();
+	
+	//middle content of shoulder
+	glBegin(GL_QUADS);
+	glVertex3f(2.46632, 12.9292, 1.06623);
+	glVertex3f(2.46632, 7.51214, 1.06623);
+	glVertex3f(-2.24513, 7.51214, 1.08117);
+	glVertex3f(-2.24513, 12.9292, 1.08117);
+
+	glVertex3f(2.46632, 7.51214, 1.06623);
+	glVertex3f(2.42886, 7.51214, -1.22552);
+	glVertex3f(-2.28258, 7.51214, -1.21058);
+	glVertex3f(-2.24513, 7.51214, 1.08117);
+
+	glVertex3f(2.42886, 7.51214, -1.22552);
+	glVertex3f(2.42886, 12.9292, -1.22552);
+	glVertex3f(-2.28258, 12.9292, -1.21058);
+	glVertex3f(-2.28258, 12.9292, -1.21058);
+	glEnd();
 }
 
 void drawCube(float len, float h, float d)
@@ -214,15 +265,115 @@ void drawCube(float len, float h, float d)
 	glEnd();
 }
 
+void drawCubes(float p1[3], float p2[3], float p3[3], float p4[3], float p5[3], float p6[3], float p7[3], float p8[3]) {
+
+	glBegin(GL_QUADS);
+
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
+
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+
+	glEnd();
+}
+
 void robotShoulder() {
 
 	robotShoulderTrape();
+
+	robotShoulderTop();
 
 	glLoadIdentity();
 	glPushMatrix();
 	glRotatef(180, 0, 1, 0);
 	glTranslatef(3.7273,0,0);
+	robotShoulderTrape();
 	glPopMatrix();
+}
+
+void robotArm() {
+
+	glBegin(GL_QUADS);
+
+	glVertex3f(2.14879, 7.29255, 0.821653); //左上
+	glVertex3f(2.12163, 7.29255, -0.839863);//右上
+	glVertex3f(2.14879, 2.61422, 0.821653);
+	glVertex3f(2.12163, 2.64763, -0.839863);
+
+	glVertex3f(-2.11795, 7.29255, -0.826418);//右下
+	glVertex3f(-2.09079, 7.29255, 0.835099);//左下
+	glVertex3f(-2.11795, 2.59365, -0.826418);
+	glVertex3f(-2.09079, 2.59365, 0.835099);
+
+	glVertex3f(2.14879, 7.29255, 0.821653); //左上
+	glVertex3f(-2.09079, 7.29255, 0.835099);//左下
+	glVertex3f(-2.09079, 2.59365, 0.835099);
+	glVertex3f(2.14879, 2.61422, 0.821653);
+
+	glVertex3f(2.12163, 7.29255, -0.839863);//右上
+	glVertex3f(-2.11795, 7.29255, -0.826418);//右下
+	glVertex3f(2.12163, 2.64763, -0.839863);
+	glVertex3f(-2.11795, 2.59365, -0.826418);
+
+	glEnd();
+
+	float p1[] = {2.14879, 2.61422, 0.821653};
+	float p2[] = { 2.12163, 2.64763, -0.839863 };
+	float p3[] = { 1.64183, 0.655484, 0.823261 };
+	float p4[] = { 2.1286, -1.80793, -0.413613 };
+	float p5[] = { -1.64081, 0.78915, -0.827931 };
+	float p6[] = { -2.08813, 2.61422, -0.826512 };
+	float p7[] = { -2.05991, 2.61659, 0.835001 };
+	float p8[] = { -1.58563, 0.771583, 0.781361 };
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	float p1[] = { 2.14244, 1.78141, 0.433236 };
+	float p2[] = { 2.1286, 1.78141, -0.413613 };
+	float p3[] = { 2.14244, -1.80793, 0.433236 };
+	float p4[] = { 1.76378, 0.822567, -0.838728 };
+	float p5[] = { -2.11098, -1.80793, -0.400168 };
+	float p6[] = { -2.11098, 1.78141, -0.400168 };
+	float p7[] = { -2.09714, 1.78141, 0.446681 };
+	float p8[] = { -2.09714, -1.80793, 0.446681 };
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	float p1[] = { 1.7655, -0.572684, 0.8861 };
+	float p2[] = { 2.1286, 1.78141, -0.413613 };
+	float p3[] = { 2.14244, -1.80793, 0.433236 };
+	float p4[] = { 1.76378, 0.822567, -0.838728 };
+	float p5[] = { -2.11098, -1.80793, -0.400168 };
+	float p6[] = { -2.11098, 1.78141, -0.400168 };
+	float p7[] = { -2.09714, 1.78141, 0.446681 };
+	float p8[] = { -2.09714, -1.80793, 0.446681 };
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
 
 }
@@ -241,8 +392,9 @@ void projection()
 	glTranslatef(ptx, pty, 0.0f);			/* Translation along X and Y axist*/
 	glRotatef(pry, 0.0f, 1.0f, 0.0f);
 
+	//gluPerspective(20.0, 1.0, -1.0, 4.0);
 	//glFrustum(-20.0, 20.0, -20.0, 20.0, pNear, pFar);
-	glOrtho(-30.0, 30.0, -30.0, 30.0, pNear, pFar);
+	glOrtho(-20.0, 20.0, -20.0, 20.0, pNear, pFar);
 }
 
 void display()
@@ -256,8 +408,8 @@ void display()
 	glTranslatef(tx, 0.0f, tz);						/* Translate for modelview */
 	glColor3f(1,1,1);
 
-	drawCube(1, 1, 1);
-	robotShoulderTrape();
+	//drawCube(1, 1, 1);
+	robotArm();
 
 	glFlush();
 }
