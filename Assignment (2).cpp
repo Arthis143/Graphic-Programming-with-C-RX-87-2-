@@ -139,6 +139,48 @@ void drawCubes(float p1[3], float p2[3], float p3[3], float p4[3], float p5[3], 
 	glVertex3f(p8[0], p8[1], p8[2]);
 
 	glEnd();
+	glColor3f(1, 0, 0);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+	glEnd();
 }
 
 void AssignCoo(float array[3], float x, float y, float z) {
@@ -596,6 +638,169 @@ void robotLeg() {
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 }
 
+void robotHorn() {
+	//middle cube
+	AssignCoo(p1, -0.181131, -1.9271, 1.99952);
+	AssignCoo(p2, 0.292784, -1.9271, 1.99952);
+	AssignCoo(p3, 0.352023, -1.9271, 1.16381);
+	AssignCoo(p4, -0.241046, -1.92846, 1.1605);
+	AssignCoo(p5, -0.181131, -1.37602, 1.99952);
+	AssignCoo(p6, 0.292784, -1.37602, 1.99952);
+	AssignCoo(p7, 0.351347, -1.37739, 1.01286);
+	AssignCoo(p8, -0.241046, -1.37739, 1.02055);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//middle triangle
+	AssignCoo(p1, -0.24037, -1.9271, 1.16381);
+	AssignCoo(p2, 0.351347, -1.92846, 1.1628);
+	AssignCoo(p3, 0.055151, -1.92846, 0.557753);
+	AssignCoo(p4, 0.055151, -1.92846, 0.557753);
+	AssignCoo(p5, -0.241046, -1.37739, 1.02055);
+	AssignCoo(p6, 0.351347, -1.37739, 1.01286);
+	AssignCoo(p7, 0.055151, -1.37739, 0.302513);
+	AssignCoo(p8, 0.055151, -1.37739, 0.302513);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+	
+	//left horn
+	AssignCoo(p1, -1.97729, -1.80822, 1.82507);
+	AssignCoo(p2, -0.21259, -1.80822, 1.48469);
+	AssignCoo(p3, -0.21259, -1.80822, 1.48469);
+	AssignCoo(p4, -1.97729, -1.80822, 1.82507);
+	AssignCoo(p5, -1.96203, -1.51285, 2.04663);
+	AssignCoo(p6, -0.182062, -1.51285, 1.92783);
+	AssignCoo(p7, -0.243118, -1.51285, 1.04156);
+	AssignCoo(p8, -1.99256, -1.51285, 1.6035);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//right horn
+	AssignCoo(p1, 0.32375, -1.80822, 1.49237);
+	AssignCoo(p2, 2.09141, -1.80822, 1.78667);
+	AssignCoo(p3, 2.09141, -1.80822, 1.78667);
+	AssignCoo(p4, 0.32375, -1.80822, 1.49237);
+	AssignCoo(p5, 0.297355, -1.51285, 1.9362);
+	AssignCoo(p6, 2.07821, -1.51285, 2.00861);
+	AssignCoo(p7, 2.10461, -1.51285, 1.56473);
+	AssignCoo(p8, 0.350146, -1.51285, 1.0485);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+}
+
+void robotMouth() {
+	//face mask main left
+	AssignCoo(p1, -0.758519, -1.93898, -0.448233);
+	AssignCoo(p2, 0.001934, -2.03898, -0.438109);
+	AssignCoo(p3, 0.001934, -2.03898, -1.81301);
+	AssignCoo(p4, -0.756103, -1.93898, -1.49756);
+	AssignCoo(p5, -0.756103, -1.03898, -0.43811);
+	AssignCoo(p6, 0.001934, -1.03898, -0.438109);
+	AssignCoo(p7, 0.001934, -1.03898, -1.85847);
+	AssignCoo(p8, -0.758519, -0.938978, -1.60977);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//face mask main right
+	AssignCoo(p1, 0.001934, -2.03898, -0.438109);
+	AssignCoo(p2, 0.762659, -1.93898, -0.448233);
+	AssignCoo(p3, 0.762659, -1.93898, -1.49259);
+	AssignCoo(p4, 0.001934, -2.03898, -1.81301);
+	AssignCoo(p5, 0.001934, -1.03898, -0.438109);
+	AssignCoo(p6, 0.760817, -1.03898, -0.438109);
+	AssignCoo(p7, 0.762659, -0.938978, -1.61569);
+	AssignCoo(p8, 0.001934, -1.03898, -1.85847);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//face mask side left
+	AssignCoo(p1, -1.00022, -1.58898, -0.448233);
+	AssignCoo(p2, -0.758519, -1.93898, -0.448233);
+	AssignCoo(p3, -0.756103, -1.93898, -1.49756);
+	AssignCoo(p4, -1.00022, -1.58898, -1.25298);
+	AssignCoo(p5, -1.00022, -0.588978, -0.448233);
+	AssignCoo(p6, -0.756103, -1.03898, -0.43811);
+	AssignCoo(p7, -0.758519, -0.938978, -1.60977);
+	AssignCoo(p8, -1.00022, -0.588978, -1.25298);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//face mask side right
+	AssignCoo(p1, 0.762659, -1.93898, -0.448233);
+	AssignCoo(p2, 1.00436, -1.58898, -0.448233);
+	AssignCoo(p3, 1.00436, -1.58898, -1.25298);
+	AssignCoo(p4, 0.762659, -1.93898, -1.49259);
+	AssignCoo(p5, 0.760817, -1.03898, -0.438109);
+	AssignCoo(p6, 1.00436, -0.588978, -0.448233);
+	AssignCoo(p7, 1.00436, -0.588978, -1.34311);
+	AssignCoo(p8, 0.762659, -0.938978, -1.61569);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+}
+
+void robotJetpack() {
+	glColor3f(0.5, 0.5, 0.5);
+	////jetpack main cube
+	AssignCoo(p1, -1.19667, 1.70808, -0.735941);
+	AssignCoo(p2, -9.06383, 1.6492, -1.30556);
+	AssignCoo(p3, -6.87774, 1.50557, -2.69513);
+	AssignCoo(p4, 0.989431, 1.56445, -2.12551);
+	AssignCoo(p5, -1.19667, -2.49736, -0.715861);
+	AssignCoo(p6, -9.06383, -2.55624, -1.28548);
+	AssignCoo(p7, -6.87774, -2.69987, -2.67505);
+	AssignCoo(p8, 0.989431, -2.64099, -2.10543);
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//jetpack boost cube left
+	AssignCoo(p1, 0.245048, 1.64805, -2.15763);
+	AssignCoo(p2, -2.70567, 1.62596, -2.37128);
+	AssignCoo(p3, -1.674, -0.813949, -3.01571);
+	AssignCoo(p4, 1.27671, -0.791865, -2.80207);
+	AssignCoo(p5, -0.554009, -1.68542, -1.63355);
+	AssignCoo(p6, -3.50473, -1.70751, -1.8472);
+	AssignCoo(p7, -2.47306, -4.14742, -2.49164);
+	AssignCoo(p8, 0.477657, -4.12533, -2.27799);
+	glColor3f(0.5, 0.5, 0.5);
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//jetpack boost cube right
+	AssignCoo(p1, -3.30023, 1.61856, -2.41795);
+	AssignCoo(p2, -6.25094, 1.59648, -2.6316);
+	AssignCoo(p3, -5.21928, -0.843433, -3.27604);
+	AssignCoo(p4, -2.26856, -0.821349, -3.06239);
+	AssignCoo(p5, -4.09928, -1.71491, -1.89388);
+	AssignCoo(p6, -7.05, -1.73699, -2.10752);
+	AssignCoo(p7, -6.01833, -4.1769, -2.75196);
+	AssignCoo(p8, -3.06762, -4.15482, -2.53832);
+	glColor3f(0.5, 0.5, 0.5);
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//jetpack left pipe cube
+	AssignCoo(p1, 1.04777, 1.69694, -0.843804);
+	AssignCoo(p2, -1.39006, 1.69583, -0.854496);
+	AssignCoo(p3, -1.31113, 1.6102, -1.68286);
+	AssignCoo(p4, 1.1267, 1.61131, -1.67217);
+	AssignCoo(p6, -1.39006, -2.50961, -0.834416);
+	AssignCoo(p5, 1.04777, -2.50851, -0.823725);
+	AssignCoo(p8, 1.1267, -2.59413, -1.65209);
+	AssignCoo(p7, -1.31113, -2.59524, -1.66278);
+	glColor3f(0.5, 0.5, 0.5);
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//jetpack right pipe cube
+	AssignCoo(p1, -8.76944, 1.63922, -1.40215);
+	AssignCoo(p2, -10.7423, 1.60744, -1.70956);
+	AssignCoo(p3, -8.47262, 1.53815, -2.37993);
+	AssignCoo(p4, -6.49977, 1.56993, -2.07251);
+	AssignCoo(p6, -10.7423, -2.598, -1.68948);
+	AssignCoo(p5, -8.76944, -2.56622, -1.38207);
+	AssignCoo(p8, -6.49977, -2.63552, -2.05243);
+	AssignCoo(p7, -8.47262, -2.66729, -2.35985);
+	glColor3f(0.5, 0.5, 0.5);
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+}
+
 void drawCube(float len, float h, float d)
 {
 	/* Face 1: Bottom */
@@ -827,6 +1032,20 @@ void display()
 	//robotKnee();
 	//robotLeg();
 	//glPopMatrix();
+
+	//glPushMatrix();
+	//glRotatef(90, -1, 0, 0);
+	//glScalef(1.01638, 0.577244, 0.775103);
+	//robotHorn();
+	//robotMouth();
+	//glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(-18.6498, 0, 0, 1);
+	glRotatef(-88.7273, 1, 0, 0);
+	glScalef(0.474706, 0.475457, 2.21222);
+	robotJetpack();
+	glPopMatrix();
 
 	glFlush();
 }
