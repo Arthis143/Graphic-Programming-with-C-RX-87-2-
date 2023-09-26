@@ -103,46 +103,62 @@ bool initPixelFormat(HDC hdc)
 	}
 }
 //--------------------------------------------------------------------
+void drawCubes(float p1[3], float p2[3], float p3[3], float p4[3], float p5[3], float p6[3], float p7[3], float p8[3]) {
 
-void robotShoulderTrape() {
 	glBegin(GL_QUADS);
 
-	//外侧正面
-	glVertex3f(2.91676, 7.59454, 1.02144);
-	glVertex3f(2.8088, 12.8828, 0.985533);
-	glVertex3f(2.81498, 12.8598, -1.75675);
-	glVertex3f(2.89683, 7.52409, -1.7381);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
 
-	//正面右侧斜面
-	glVertex3f(2.89683, 7.52409, -1.7381);
-	glVertex3f(2.81498, 12.8598, -1.75675);
-	glVertex3f(1.72206, 13.4897, -2.05396);
-	glVertex3f(1.82333, 6.93069, -2.05428);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
 
-	//正面上侧斜面
-	glVertex3f(2.81498, 12.8598, -1.75675);
-	glVertex3f(1.72206, 13.4897, -2.05396);
-	glVertex3f(1.77636, 13.4897, 1.26853);
-	glVertex3f(2.8088, 12.8828, 0.985533);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
 
-	//正面左侧斜面
-	glVertex3f(2.8088, 12.8828, 0.985533);
-	glVertex3f(1.77636, 13.4897, 1.26853);
-	glVertex3f(1.87763, 6.93069, 1.2682);
-	glVertex3f(2.91676, 7.59454, 1.02144);
+	glVertex3f(p3[0], p3[1], p3[2]);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
+	glVertex3f(p7[0], p7[1], p7[2]);
 
-	//正面下侧斜面
-	glVertex3f(1.87763, 6.93069, 1.2682);
-	glVertex3f(2.91676, 7.59454, 1.02144);
-	glVertex3f(2.89683, 7.52409, -1.7381);
-	glVertex3f(1.82333, 6.93069, -2.05428);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p6[0], p6[1], p6[2]);
 
-	glVertex3f(1.82333, 6.93069, -2.05428);
-	glVertex3f(1.72206, 13.4897, -2.05396);
-	glVertex3f(1.77636, 13.4897, 1.26853);
-	glVertex3f(1.87763, 6.93069, -1.2682);
+	glVertex3f(p4[0], p4[1], p4[2]);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glVertex3f(p5[0], p5[1], p5[2]);
+	glVertex3f(p8[0], p8[1], p8[2]);
 
 	glEnd();
+}
+
+void AssignCoo(float array[3], float x, float y, float z) {
+	array[0] = x;
+	array[1] = y;
+	array[2] = z;
+}
+
+void robotShoulderTrape() {
+
+	float p1[] = { 2.8088, 12.8828, 0.985533 };
+	float p2[] = { 2.81498, 12.8598, -1.75675 };
+	float p3[] = { 2.89683, 7.52409, -1.7381 };
+	float p4[] = { 2.91676, 7.59454, 1.02144 };
+	float p5[] = { 1.77636, 13.4897, 1.26853 };
+	float p6[] = { 1.72206, 13.4897, -2.05396 };
+	float p7[] = { 1.82333, 6.93069, -2.05428 };
+	float p8[] = { 1.87763, 6.93069, 1.2682 };
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
 }
 
 void robotShoulderTop() {
@@ -264,49 +280,6 @@ void drawCube(float len, float h, float d)
 	glVertex3f(len, h, d);			/* Point 4: Top left */
 
 	glEnd();
-}
-
-void drawCubes(float p1[3], float p2[3], float p3[3], float p4[3], float p5[3], float p6[3], float p7[3], float p8[3]) {
-
-	glBegin(GL_QUADS);
-
-	glVertex3f(p1[0], p1[1], p1[2]);
-	glVertex3f(p2[0], p2[1], p2[2]);
-	glVertex3f(p3[0], p3[1], p3[2]);
-	glVertex3f(p4[0], p4[1], p4[2]);
-
-	glVertex3f(p1[0], p1[1], p1[2]);
-	glVertex3f(p3[0], p3[1], p3[2]);
-	glVertex3f(p8[0], p8[1], p8[2]);
-	glVertex3f(p7[0], p7[1], p7[2]);
-
-	glVertex3f(p5[0], p5[1], p5[2]);
-	glVertex3f(p6[0], p6[1], p6[2]);
-	glVertex3f(p7[0], p7[1], p7[2]);
-	glVertex3f(p8[0], p8[1], p8[2]);
-
-	glVertex3f(p1[0], p1[1], p1[2]);
-	glVertex3f(p2[0], p2[1], p2[2]);
-	glVertex3f(p6[0], p6[1], p6[2]);
-	glVertex3f(p7[0], p7[1], p7[2]);
-
-	glVertex3f(p2[0], p2[1], p2[2]);
-	glVertex3f(p4[0], p4[1], p4[2]);
-	glVertex3f(p5[0], p5[1], p5[2]);
-	glVertex3f(p6[0], p6[1], p6[2]);
-
-	glVertex3f(p3[0], p3[1], p3[2]);
-	glVertex3f(p4[0], p4[1], p4[2]);
-	glVertex3f(p5[0], p5[1], p5[2]);
-	glVertex3f(p8[0], p8[1], p8[2]);
-
-	glEnd();
-}
-
-void AssignCoo(float array[3], float x, float y, float z) {
-	array[0] = x;
-	array[1] = y;
-	array[2] = z;
 }
 
 void robotShoulder() {
@@ -432,7 +405,7 @@ void display()
 	
 	glColor3f(1,1,1);
 
-	drawCube(1, 1, 1);
+	/*drawCube(1, 1, 1);
 	glPushMatrix();
 	glRotatef(269.59, 0, 1, 0);
 	glScalef(0.530, 0.473, 1.204);
@@ -440,7 +413,10 @@ void display()
 	robotShoulder();
 	glColor3f(1, 1, 0);
 	robotArm();
-	glPopMatrix();
+	glPopMatrix();*/
+
+	robotShoulderTrape();
+
 
 	glFlush();
 }
