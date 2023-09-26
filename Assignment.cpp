@@ -10,7 +10,8 @@
 float tx = 0.0f, tz = 0.0f, tSpeed = 1.0f;		/* Translate for modelview */
 float ptx = 0.0f, pty = 0.0f, ptSpeed = 0.1f;	/* Translate for projection */
 float pry = 0.0f, prSpeed = 1.0f;
-float pNear = -20.0f, pFar = 20.0f;				/* Perspective near and far */
+float pNear = 1.0f, pFar = 10.0f;				/* Perspective near and far */
+float x[3];
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -302,6 +303,12 @@ void drawCubes(float p1[3], float p2[3], float p3[3], float p4[3], float p5[3], 
 	glEnd();
 }
 
+void AssignCoo(float array[3], float x, float y, float z) {
+	array[0] = x;
+	array[1] = y;
+	array[2] = z;
+}
+
 void robotShoulder() {
 
 	robotShoulderTrape();
@@ -317,6 +324,9 @@ void robotShoulder() {
 }
 
 void robotArm() {
+
+	//robotShoulderTrape();
+	//robotShoulderTop();
 
 	glBegin(GL_QUADS);
 
@@ -353,25 +363,36 @@ void robotArm() {
 
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
-	float p1[] = { 2.14244, 1.78141, 0.433236 };
-	float p2[] = { 2.1286, 1.78141, -0.413613 };
-	float p3[] = { 2.14244, -1.80793, 0.433236 };
-	float p4[] = { 1.76378, 0.822567, -0.838728 };
-	float p5[] = { -2.11098, -1.80793, -0.400168 };
-	float p6[] = { -2.11098, 1.78141, -0.400168 };
-	float p7[] = { -2.09714, 1.78141, 0.446681 };
-	float p8[] = { -2.09714, -1.80793, 0.446681 };
+	AssignCoo(p1, 2.14244, 1.78141, 0.433236);
+	AssignCoo(p2, 2.1286, 1.78141, -0.413613);
+	AssignCoo(p3, 2.14244, -1.80793, 0.433236);
+	AssignCoo(p4, 1.76378, 0.822567, -0.838728);
+	AssignCoo(p5, -2.11098, -1.80793, -0.400168);
+	AssignCoo(p6, - 2.11098, 1.78141, -0.400168);
+	AssignCoo(p7, - 2.09714, 1.78141, 0.446681);
+	AssignCoo(p8, - 2.09714, -1.80793, 0.446681);
 
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
-	float p1[] = { 1.7655, -0.572684, 0.8861 };
-	float p2[] = { 2.1286, 1.78141, -0.413613 };
-	float p3[] = { 2.14244, -1.80793, 0.433236 };
-	float p4[] = { 1.76378, 0.822567, -0.838728 };
-	float p5[] = { -2.11098, -1.80793, -0.400168 };
-	float p6[] = { -2.11098, 1.78141, -0.400168 };
-	float p7[] = { -2.09714, 1.78141, 0.446681 };
-	float p8[] = { -2.09714, -1.80793, 0.446681 };
+	AssignCoo(p1, 1.7655, -0.572684, 0.8861 );
+	AssignCoo(p2, 1.85708, -0.495331, -0.902255 );
+	AssignCoo(p3, 2.31787, -2.98535, 0.891951 );
+	AssignCoo(p4, 2.28827, -3.02403, -0.918827 );
+	AssignCoo(p5, -2.2869, -3.02403, -0.889113 );
+	AssignCoo(p6, -1.61385, -0.495331, -0.891248 );
+	AssignCoo(p7, -1.6364, -0.495331, 0.896889 );
+	AssignCoo(p8, -2.25768, -3.02403, 0.898859 );
+
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	AssignCoo(p1, 2.31774, -3.00746, 0.884349 );
+	AssignCoo(p2, 2.28852, -3.00746, -0.903623 );
+	AssignCoo(p3, 2.31774, -11.7438, 0.884349 );
+	AssignCoo(p4, 2.28852, -11.7438, -0.903623 );
+	AssignCoo(p5, -2.2869, -11.7438, -0.889113 );
+	AssignCoo(p6, -2.2869, -3.00746, -0.889113 );
+	AssignCoo(p7, -2.25768, -3.00746, 0.898859 );
+	AssignCoo(p8, -2.25768, -11.7438, 0.898859 );
 
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
@@ -392,9 +413,9 @@ void projection()
 	glTranslatef(ptx, pty, 0.0f);			/* Translation along X and Y axist*/
 	glRotatef(pry, 0.0f, 1.0f, 0.0f);
 
-	//gluPerspective(20.0, 1.0, -1.0, 4.0);
-	//glFrustum(-20.0, 20.0, -20.0, 20.0, pNear, pFar);
-	glOrtho(-20.0, 20.0, -20.0, 20.0, pNear, pFar);
+	gluPerspective(45.0f, 1.0f, -1.0, 4.0);
+	glFrustum(-30.0, 30.0, -30.0, 30.0, pNear, pFar);
+	//glOrtho(-20.0, 20.0, -20.0, 20.0, pNear, pFar);
 }
 
 void display()
@@ -405,11 +426,21 @@ void display()
 
 	glMatrixMode(GL_MODELVIEW);						/* Refer to modelview matrix */
 	glLoadIdentity();
+
 	glTranslatef(tx, 0.0f, tz);						/* Translate for modelview */
+	//glRotatef(pry, 0, 1, 0);
+	
 	glColor3f(1,1,1);
 
-	//drawCube(1, 1, 1);
+	drawCube(1, 1, 1);
+	glPushMatrix();
+	glRotatef(269.59, 0, 1, 0);
+	glScalef(0.530, 0.473, 1.204);
+	glColor3f(1, 1, 1);
+	robotShoulder();
+	glColor3f(1, 1, 0);
 	robotArm();
+	glPopMatrix();
 
 	glFlush();
 }
