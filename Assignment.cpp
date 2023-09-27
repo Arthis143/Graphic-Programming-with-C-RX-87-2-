@@ -7,12 +7,31 @@
 
 #define WINDOW_TITLE "OpenGL Window"
 
+BITMAP BMP;							/* Bitmap structure */
+HBITMAP hBMP = NULL;				/* Bitmap handle */
+
 float tx = 0.0f, tz = 0.0f, tSpeed = 1.0f;		/* Translate for modelview */
 float ptx = 0.0f, pty = 0.0f, ptSpeed = 0.1f;	/* Translate for projection */
 float pry = 0.0f, prSpeed = 1.0f;
 float pNear = 1.0f, pFar = 10.0f;				/* Perspective near and far */
 float x[3];
 float p1[3], p2[3], p3[3], p4[3], p5[3], p6[3], p7[3], p8[3];
+
+/* Lighting vars */
+bool isLightOn = false;
+float tX = -0.8f, tY = 0.8f, tZ = 0.0f;
+float lSpeed = 5.0f;
+
+/* Ambient vars */
+float amb[] = { 0.0f, 1.0f, 1.0f };			/* Ambient light - White */
+float posA[] = { -10.0f, 10.0f, 10.0f };		/* Light position above sphere (Y = 0.8) */
+float ambM[] = { 0.0f, 0.0f, 0.0f };		/* Ambient material - Blue */
+
+/* Diffuse vars */
+float dif[] = { 0.0f, 1.0f, 1.0f };			/* Diffuse light - White */
+float posD[] = { -10.0f, 10.0f, 10.0f };		/* Light position right of sphere (X = 0.8) */
+float difM[] = { 0.0f, 0.0f, 0.0f };		/* Diffuse material - Blue */
+
 
 LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -54,13 +73,54 @@ LRESULT WINAPI WindowProcedure(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			ptx += ptSpeed;
 			break;
 
-		case 'L':
+		case 'T':
 			pry += prSpeed;
 			break;
 
 		case 'R':
 			pry -= prSpeed;
 			break;
+
+		case VK_SPACE:					/* On or Off light */
+			isLightOn = !isLightOn;
+			break;
+
+		case 'I':						/* Move light up */
+			posA[1] += lSpeed;
+			posD[1] += lSpeed;
+			tY += lSpeed;
+			break;
+
+		case 'K':						/* Move light down */
+			posA[1] -= lSpeed;
+			posD[1] -= lSpeed;
+			tY -= lSpeed;
+			break;
+
+		case 'J':						/* Move light left */
+			posA[0] -= lSpeed;
+			posD[0] -= lSpeed;
+			tX -= lSpeed;
+			break;
+
+		case 'L':						/* Move light right */
+			posA[0] += lSpeed;
+			posD[0] += lSpeed;
+			tX += lSpeed;
+			break;
+
+		case 'U':						/* Move light nearer */
+			posA[2] -= lSpeed;
+			posD[2] -= lSpeed;
+			tZ -= lSpeed;
+			break;
+
+		case 'O':						/* Move light further */
+			posA[2] += lSpeed;
+			posD[2] += lSpeed;
+			tZ += lSpeed;
+			break;
+
 		}
 		break;
 		
@@ -104,38 +164,133 @@ bool initPixelFormat(HDC hdc)
 	}
 }
 //--------------------------------------------------------------------
+GLuint loadTexture(LPCSTR filename)
+{
+	// Take from step 1
+	GLuint texture = 0;					/* Texture name */
+
+	// Step 3: Initialize texture info
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	HBITMAP hBMP = (HBITMAP)LoadImage(GetModuleHandle(NULL),
+		filename, IMAGE_BITMAP, 0, 0,
+		LR_CREATEDIBSECTION | LR_LOADFROMFILE);
+	GetObject(hBMP, sizeof(BMP), &BMP);
+
+	// Step 4: Assign texture to polygon
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, BMP.bmWidth,
+		BMP.bmHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, BMP.bmBits);
+
+	DeleteObject(hBMP);
+
+	return texture;
+}
+
 void drawCubes(float p1[3], float p2[3], float p3[3], float p4[3], float p5[3], float p6[3], float p7[3], float p8[3]) {
 
 	glBegin(GL_QUADS);
 
+	//FRONT-------------------------------------
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(p1[0], p1[1], p1[2]);
+
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(p2[0], p2[1], p2[2]);
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(p3[0], p3[1], p3[2]);
+
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(p4[0], p4[1], p4[2]);
 
+	glEnd();
+
+	//BACK--------------------------------------
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(p5[0], p5[1], p5[2]);
+
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(p6[0], p6[1], p6[2]);
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(p7[0], p7[1], p7[2]);
+
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(p8[0], p8[1], p8[2]);
 
+	glEnd();
+
+
+	//
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(p3[0], p3[1], p3[2]);
+
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(p4[0], p4[1], p4[2]);
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(p8[0], p8[1], p8[2]);
+
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(p7[0], p7[1], p7[2]);
 
+	glEnd();
+
+	//
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(p3[0], p3[1], p3[2]);
+
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(p2[0], p2[1], p2[2]);
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(p6[0], p6[1], p6[2]);
+
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(p7[0], p7[1], p7[2]);
 
+	glEnd();
+
+	//
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(p2[0], p2[1], p2[2]);
+
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(p1[0], p1[1], p1[2]);
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(p5[0], p5[1], p5[2]);
+
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(p6[0], p6[1], p6[2]);
 
+	glEnd();
+
+	//
+	glBegin(GL_QUADS);
+
+	glTexCoord2f(1.0f, 1.0f);
 	glVertex3f(p4[0], p4[1], p4[2]);
+
+	glTexCoord2f(1.0f, 0.0f);
 	glVertex3f(p1[0], p1[1], p1[2]);
+
+	glTexCoord2f(0.0f, 0.0f);
 	glVertex3f(p5[0], p5[1], p5[2]);
+
+	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(p8[0], p8[1], p8[2]);
 
 	glEnd();
@@ -147,9 +302,51 @@ void AssignCoo(float array[3], float x, float y, float z) {
 	array[2] = z;
 }
 
+void drawCylinder(double br, double tr, double h)
+{
+	GLUquadricObj* cylinder = NULL;					/* Quadric obj pointer */
+	cylinder = gluNewQuadric();						/* Create the quadric obj in the memory */
+
+	//glLineWidth(3.0f);
+	gluQuadricDrawStyle(cylinder, GLU_FILL);		/* Draw style - Line */
+	gluQuadricTexture(cylinder, true);				/* Enable mapping */
+	gluCylinder(cylinder, br, tr, h, 30, 30);		/* Draw sphere */
+
+	gluDeleteQuadric(cylinder);
+}
+
+void drawDisk(double ir, double r, int h)
+{
+	GLUquadricObj* disk = NULL;					/* Quadric obj pointer */
+	disk = gluNewQuadric();						/* Create the quadric obj in the memory */
+
+	//glLineWidth(3.0f);
+	gluQuadricDrawStyle(disk, GLU_FILL);		/* Draw style - Line */
+	gluQuadricTexture(disk, true);				/* Enable mapping */
+	gluDisk(disk, ir, r, h, 10);		/* Draw sphere */
+
+	gluDeleteQuadric(disk);
+}
+
+void drawSphere(double radius)
+{
+	GLUquadricObj* sphere = NULL;					/* Quadric obj pointer */
+	sphere = gluNewQuadric();						/* Create the quadric obj in the memory */
+
+	glPointSize(3.0);
+	//glLineWidth(3.0f);
+	gluQuadricDrawStyle(sphere, GLU_FILL);			/* Draw style - Line */
+	gluQuadricTexture(sphere, true);				/* Enable mapping */
+	gluSphere(sphere, radius, 30, 30);				/* Draw sphere */
+
+	gluDeleteQuadric(sphere);
+}
+
 //----------------ARM--------------------------------------------------
 
 void robotShoulder() {
+
+	//GLuint texture[1];
 
 	AssignCoo(p1, 2.8088, 12.8828, 0.985533);
 	AssignCoo(p2, 2.81498, 12.8598, -1.75675);
@@ -160,6 +357,7 @@ void robotShoulder() {
 	AssignCoo(p7, 1.82333, 6.93069, -2.05428);
 	AssignCoo(p8, 1.87763, 6.93069, 1.2682);
 
+	//texture[0] = loadTexture("MetalBlack.bmp");
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
 	AssignCoo(p1, -1.84968, 13.4606, 1.28002);
@@ -171,6 +369,7 @@ void robotShoulder() {
 	AssignCoo(p7, -2.97719, 7.55147, -1.73838);
 	AssignCoo(p8, -2.88174, 7.52746, 1.00358);
 
+	
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
 	AssignCoo(p1, 1.78392, 13.3975, 1.23897);
@@ -194,6 +393,11 @@ void robotShoulder() {
 	AssignCoo(p8, -2.28258, 7.51214, -1.21058);
 
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+
+	//glDeleteTextures(1, &texture[0]);
+
+	//glDisable(GL_TEXTURE_2D);
+
 }
 
 void robotArm() {
@@ -207,7 +411,6 @@ void robotArm() {
 	AssignCoo(p7, -2.09079, 7.29255, 0.835099);
 	AssignCoo(p8, -2.09079, 2.59365, 0.835099);
 
-	glColor3f(0.7, 0.7, 0.7);
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
 	AssignCoo(p1, 1.76378, 0.822567, -0.838728);
@@ -219,19 +422,6 @@ void robotArm() {
 	AssignCoo(p7, -2.05991, 2.61659, 0.835001);
 	AssignCoo(p8, -1.58563, 0.771583, 0.781361);
 
-	glColor3f(0.7, 0.7, 0.7);
-	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
-
-	AssignCoo(p1, 2.14244, -1.80793, 0.433236);
-	AssignCoo(p2, 2.14244, 1.78141, 0.433236);
-	AssignCoo(p3, 2.1286, 1.78141, -0.413613);
-	AssignCoo(p4, 2.1286, -1.80793, -0.413613);
-	AssignCoo(p5, -2.09714, -1.80793, 0.446681);
-	AssignCoo(p6, -2.09714, 1.78141, 0.446681);
-	AssignCoo(p7, -2.11098, 1.78141, -0.400168);
-	AssignCoo(p8, -2.11098, -1.80793, -0.400168);
-
-	glColor3f(0.1, 0.1, 0.1);
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
 	AssignCoo(p1, 1.7655, -0.572684, 0.8861);
@@ -243,7 +433,6 @@ void robotArm() {
 	AssignCoo(p7, -2.2869, -3.02403, -0.889113);
 	AssignCoo(p8, -2.25768, -3.02403, 0.898859);
 
-	glColor3f(0.7, 0.7, 0.7);
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 
 	AssignCoo(p1, 2.31774, -3.00746, 0.884349);
@@ -255,7 +444,20 @@ void robotArm() {
 	AssignCoo(p7, -2.2869, -11.7438, -0.889113);
 	AssignCoo(p8, -2.25768, -11.7438, 0.898859);
 
-	glColor3f(0.7, 0.7, 0.7);
+	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+}
+
+void robotArmJoint() {
+	//joint
+	AssignCoo(p1, 2.14244, -1.80793, 0.433236);
+	AssignCoo(p2, 2.14244, 1.78141, 0.433236);
+	AssignCoo(p3, 2.1286, 1.78141, -0.413613);
+	AssignCoo(p4, 2.1286, -1.80793, -0.413613);
+	AssignCoo(p5, -2.09714, -1.80793, 0.446681);
+	AssignCoo(p6, -2.09714, 1.78141, 0.446681);
+	AssignCoo(p7, -2.11098, 1.78141, -0.400168);
+	AssignCoo(p8, -2.11098, -1.80793, -0.400168);
+
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 }
 
@@ -391,35 +593,70 @@ void robotHand() {
 	robotOuterFinger();
 }
 
+void LeftArmCombine() {
+
+	/*GLuint texture;
+
+	glEnable(GL_TEXTURE_2D);
+
+	texture = loadTexture("SolidBlue.bmp");
+	glBindTexture(GL_TEXTURE_2D, texture);*/
+
+	glColor3f(0.5, 0.5, 0.5);
+	robotShoulder();
+	glColor3f(0.9, 0.9, 0.9);
+	robotArm();
+	glColor3f(0.7, 0.7, 0.7);
+	robotHand();
+	glColor3f(1, 0, 0);
+	robotArmJoint();
+
+	/*glDeleteTextures(1, &texture);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glDisable(GL_TEXTURE_2D);*/
+
+}
+
 void robotDrawLeftArm() {
 
 	glPushMatrix();
-	glTranslatef(4.68433, -4.58188, -1.12552);
+	glTranslatef(4.37942, 4.7356, -1.12552);
 	glRotatef(3.93835, 0, 0, 1);
 	glRotatef(269.588, 0, 1, 0);
 	glScalef(0.530227, 0.473188, 1.20369);
-	glColor3f(1, 0, 0);
-	robotShoulder();
-	robotArm();
-	glColor3f(0, 0, 1);
-	robotHand();
+	LeftArmCombine();
 	glPopMatrix();
+
+	/*glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(4.64937, -4.59912, -0.990852);
+	drawSphere(1);
+	glPopMatrix();*/
 
 }
 
 void robotDrawRightArm() {
 
 	glPushMatrix();
-	glTranslatef(-4.75187, -4.53826, -1.14512);
+	glTranslatef(-5.05678, 4.77922, -1.14512);
 	glRotatef(-4.84058, 0, 0, 1);
 	glRotatef(90, 0, 1, 0);
 	glScalef(0.530227, 0.473188, 1.20369);
 	glColor3f(1, 0, 0);
 	robotShoulder();
 	robotArm();
+	robotArmJoint();
 	glColor3f(0, 0, 1);
 	robotHand();
 	glPopMatrix();
+
+	/*glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(-4.71718, -4.55605, -1.27979);
+	drawSphere(1);
+	glPopMatrix();*/
 
 }
 
@@ -805,7 +1042,7 @@ void robotJetpack() {
 void robotDrawBody() {
 
 	glPushMatrix();
-	glTranslatef(3.02375, 2.99336, -3.89528);
+	glTranslatef(2.71884, 12.3108, -3.89528);
 	glRotatef(-18.6498, 0, 0, 1);
 	glRotatef(-90, 1, 0, 0);
 	glScalef(0.475517, 0.475453, 2.22625);
@@ -1138,7 +1375,7 @@ void robotMouth() {
 void robotDrawHead() {
 
 	glPushMatrix();
-	glTranslatef(0.025835, 3.47691, -0.573511);
+	glTranslatef(-0.279077, 12.7944, -0.573511);
 	glRotatef(-90, 1, 0, 0);
 	glScalef(1.01638, 0.577244, 0.775103);
 	robotHorn();
@@ -1286,7 +1523,7 @@ void robotSwordBlade() {
 void robotDrawSword() {
 
 	glPushMatrix();
-	glTranslatef(-8.74638, -3.05074, -1.67188);
+	glTranslatef(-11.8814, 5.5975, -1.67188);
 	glRotatef(180, 0, 1, 0);
 	glScalef(0.336975, 8.25759, 0.382484);
 	robotSwordhandle();
@@ -1405,7 +1642,7 @@ void robotSheildOutter() {
 void robotDrawShield() {
 
 	glPushMatrix();
-	glTranslatef(12.2194, -5.80761, 1.45277);
+	glTranslatef(11.9145, 3.50987, 1.45277);
 	glScalef(0.377375, 0.760072, 1.0);
 	robotSheildStar();
 	robotSheildInner();
@@ -1565,25 +1802,60 @@ void robotLeg() {
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
 }
 
-void robotDrawRightLeg() {
-
+void robotLeftLegJoint() {
 	glPushMatrix();
-	glTranslatef(-1.97736, -13.5587, -0.626873);
-	glRotatef(-90, 0, 0, 1);
-	glRotatef(90, 1, 0, 0);
-	glScalef(0.768733, 0.852985, 1.20982);
-	robotThigh();
-	robotCalf();
-	robotKnee();
-	robotLeg();
+	glColor3f(0.2, 0.2, 0.2);
+	glTranslatef(2.1621, -13.5167, -0.6079);
+	drawSphere(1);
 	glPopMatrix();
 
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.992658, -13.6878, -0.616218);
+	glRotatef(90, 0, 1, 0);
+	drawCylinder(0.852952, 0.852952, 2.419492);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.992658, -13.6878, -0.616218);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(3.41215, -13.6878, -0.616218);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.350545, -22.5158, -1.681143);
+	glRotatef(90, 0, 1, 0);
+	drawCylinder(0.852952, 0.852952, 4);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.350545, -22.5158, -1.681143);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(4.350545, -22.5158, -1.681143);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
 }
 
 void robotDrawLeftLeg() {
 
 	glPushMatrix();
-	glTranslatef(2.19489, -13.679, -0.626873);
+	glTranslatef(1.88998, -4.36152, -0.626873);
 	glRotatef(-90, 0, 0, 1);
 	glRotatef(90, 1, 0, 0);
 	glScalef(0.768733, 0.852985, 1.20982);
@@ -1592,6 +1864,76 @@ void robotDrawLeftLeg() {
 	robotKnee();
 	robotLeg();
 	glPopMatrix();
+
+	robotLeftLegJoint();
+}
+
+void robotRightLegJoint() {
+
+	glPushMatrix();
+	glColor3f(0.2, 0.2, 0.2);
+	glTranslatef(-2.1621, -13.5167, 0.6079);
+	drawSphere(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.992658, -13.6878, -0.616218);
+	glRotatef(90, 0, 1, 0);
+	drawCylinder(0.852952, 0.852952, 2.419492);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.992658, -13.6878, -0.616218);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(3.41215, -13.6878, -0.616218);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.350545, -22.5158, -1.681143);
+	glRotatef(90, 0, 1, 0);
+	drawCylinder(0.852952, 0.852952, 4);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(0.350545, -22.5158, -1.681143);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glColor3f(0.1, 0.1, 0.1);
+	glTranslatef(4.350545, -22.5158, -1.681143);
+	glRotatef(90, 0, 1, 0);
+	drawDisk(0, 0.852952, 10);
+	glPopMatrix();
+
+}
+
+void robotDrawRightLeg() {
+
+	glPushMatrix();
+	glTranslatef(-2.28227, -4.24122, -0.626873);
+	glRotatef(-90, 0, 0, 1);
+	glRotatef(90, 1, 0, 0);
+	glScalef(0.768733, 0.852985, 1.20982);
+	robotThigh();
+	robotCalf();
+	robotKnee();
+	robotLeg();
+	glPopMatrix();
+
+	robotRightLegJoint();
 
 }
 
@@ -1613,7 +1955,27 @@ void projection()
 
 	//gluPerspective(45.0f, 1.0f, -1.0, 4.0);
 	//glFrustum(-30.0, 30.0, -30.0, 30.0, pNear, pFar);
-	glOrtho(-30.0, 30.0, -30.0, 30.0, -30, 30);
+	glOrtho(-20.0, 20.0, -20.0, 20.0, -20, 20);
+}
+
+void lighting()
+{
+	if (isLightOn) {
+		glEnable(GL_LIGHTING);		/* Enable light */
+	}
+	else {
+		glDisable(GL_LIGHTING);		/* Disable light */
+	}
+
+	/* Light 0: Red ambient light, pos(0.0, 0.8, 0.0) above sphere */
+	glLightfv(GL_LIGHT0, GL_AMBIENT, amb);
+	glLightfv(GL_LIGHT0, GL_POSITION, posA);
+	//glEnable(GL_LIGHT0);
+
+	/* Light 1: Green diffuse light, pos(0.0, 0.8, 0.0) right of sphere */
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, dif);
+	glLightfv(GL_LIGHT1, GL_POSITION, posD);
+	glEnable(GL_LIGHT1);
 }
 
 //-----------------------------------------------------------------------
@@ -1621,17 +1983,23 @@ void projection()
 void display()
 {
 	clearColor();
+	glClearColor(1, 1, 1, 1);
 
 	projection();
+
+	lighting();
 
 	glMatrixMode(GL_MODELVIEW);						/* Refer to modelview matrix */
 	glLoadIdentity();
 
 	glTranslatef(tx, 0.0f, tz);						/* Translate for modelview */
 
-	//Head
-	robotDrawLeftArm();
+	GLuint texture[1];
+	texture[0] = loadTexture("testPaper.bmp");
+
+	//Arm
 	robotDrawRightArm();
+	robotDrawLeftArm();
 
 	//Body
 	robotDrawBody();
@@ -1648,6 +2016,9 @@ void display()
 
 	//Shield
 	robotDrawShield();
+
+	glDeleteTextures(1, &texture[0]);
+	glDisable(GL_TEXTURE_2D);
 
 	glFlush();
 }
