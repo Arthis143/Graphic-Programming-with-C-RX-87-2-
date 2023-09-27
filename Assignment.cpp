@@ -400,7 +400,7 @@ void robotShoulder() {
 
 }
 
-void robotArm() {
+void robotUpperArm() {
 
 	AssignCoo(p1, 2.12163, 2.59365, -0.839863);
 	AssignCoo(p2, 2.12163, 7.29255, -0.839863);
@@ -423,7 +423,9 @@ void robotArm() {
 	AssignCoo(p8, -1.58563, 0.771583, 0.781361);
 
 	drawCubes(p1, p2, p3, p4, p5, p6, p7, p8);
+}
 
+void robotBottomArm() {
 	AssignCoo(p1, 1.7655, -0.572684, 0.8861);
 	AssignCoo(p2, 1.85708, -0.495331, -0.902255);
 	AssignCoo(p3, 2.28827, -3.02403, -0.918827);
@@ -593,7 +595,7 @@ void robotHand() {
 	robotOuterFinger();
 }
 
-void LeftArmCombine() {
+void ArmCombine() {
 
 	/*GLuint texture;
 
@@ -605,7 +607,8 @@ void LeftArmCombine() {
 	glColor3f(0.5, 0.5, 0.5);
 	robotShoulder();
 	glColor3f(0.9, 0.9, 0.9);
-	robotArm();
+	robotUpperArm();
+	robotBottomArm();
 	glColor3f(0.7, 0.7, 0.7);
 	robotHand();
 	glColor3f(1, 0, 0);
@@ -626,7 +629,7 @@ void robotDrawLeftArm() {
 	glRotatef(3.93835, 0, 0, 1);
 	glRotatef(269.588, 0, 1, 0);
 	glScalef(0.530227, 0.473188, 1.20369);
-	LeftArmCombine();
+	ArmCombine();
 	glPopMatrix();
 
 	/*glPushMatrix();
@@ -644,12 +647,7 @@ void robotDrawRightArm() {
 	glRotatef(-4.84058, 0, 0, 1);
 	glRotatef(90, 0, 1, 0);
 	glScalef(0.530227, 0.473188, 1.20369);
-	glColor3f(1, 0, 0);
-	robotShoulder();
-	robotArm();
-	robotArmJoint();
-	glColor3f(0, 0, 1);
-	robotHand();
+	ArmCombine();
 	glPopMatrix();
 
 	/*glPushMatrix();
@@ -1803,50 +1801,53 @@ void robotLeg() {
 }
 
 void robotLeftLegJoint() {
+
+	//knee
 	glPushMatrix();
 	glColor3f(0.2, 0.2, 0.2);
-	glTranslatef(2.1621, -13.5167, -0.6079);
+	glTranslatef(1.85719, -4.19922, -0.6079);
 	drawSphere(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.992658, -13.6878, -0.616218);
+	glTranslatef(0.672724, -4.37042, -0.616218);
 	glRotatef(90, 0, 1, 0);
 	drawCylinder(0.852952, 0.852952, 2.419492);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.992658, -13.6878, -0.616218);
+	glTranslatef(0.672724, -4.37042, -0.616218);
 	glRotatef(90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(3.41215, -13.6878, -0.616218);
+	glTranslatef(3.09346, -4.37042, -0.616218);
 	glRotatef(90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
+	//foot
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.350545, -22.5158, -1.681143);
+	glTranslatef(0.034762, -13.1984, -1.209808);
 	glRotatef(90, 0, 1, 0);
 	drawCylinder(0.852952, 0.852952, 4);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.350545, -22.5158, -1.681143);
+	glTranslatef(0.034762, -13.1984, -1.209808);
 	glRotatef(90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(4.350545, -22.5158, -1.681143);
+	glTranslatef(4, -13.1984, -1.209808);
 	glRotatef(90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
@@ -1870,51 +1871,53 @@ void robotDrawLeftLeg() {
 
 void robotRightLegJoint() {
 
+	//knee
 	glPushMatrix();
 	glColor3f(0.2, 0.2, 0.2);
-	glTranslatef(-2.1621, -13.5167, 0.6079);
+	glTranslatef(-2.31506, -4.07892, -0.6079);
 	drawSphere(1);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.992658, -13.6878, -0.616218);
-	glRotatef(90, 0, 1, 0);
+	glTranslatef(-1.06502, -4.25015, -0.637532);
+	glRotatef(-90, 0, 1, 0);
 	drawCylinder(0.852952, 0.852952, 2.419492);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.992658, -13.6878, -0.616218);
+	glTranslatef(-1.08004, -4.25015, -0.637532);
 	glRotatef(90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(3.41215, -13.6878, -0.616218);
+	glTranslatef(-3.49952, -4.25015, -0.637532);
 	glRotatef(90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
+	//foot
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.350545, -22.5158, -1.681143);
-	glRotatef(90, 0, 1, 0);
+	glTranslatef(-0.437932, -13.051, -1.242388);
+	glRotatef(-90, 0, 1, 0);
 	drawCylinder(0.852952, 0.852952, 4);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(0.350545, -22.5158, -1.681143);
-	glRotatef(90, 0, 1, 0);
+	glTranslatef(-0.437932, -13.051, -1.242388);
+	glRotatef(-90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(0.1, 0.1, 0.1);
-	glTranslatef(4.350545, -22.5158, -1.681143);
-	glRotatef(90, 0, 1, 0);
+	glTranslatef(-4.43749, -13.051, -1.242388);
+	glRotatef(-90, 0, 1, 0);
 	drawDisk(0, 0.852952, 10);
 	glPopMatrix();
 
